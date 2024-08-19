@@ -7,9 +7,7 @@ export const PageTitle: React.FC<WithChildrenProps> = ({ children }) => {
   const Company = useAppSelector((state) => state.company);
   return (
     <Helmet>
-      <title>
-        {children} | {Company?.name}
-      </title>
+      <title>{`${children || ''} |${Company?.name || ''}`}</title>
     </Helmet>
   );
 };
