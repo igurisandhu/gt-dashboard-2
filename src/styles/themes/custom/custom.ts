@@ -104,5 +104,6 @@ export const customColorsTheme: ITheme = {
   breadcrumb: 'rgba(0, 0, 0, 0.45)',
   icon: '#a9a9a9',
   iconHover: 'rgba(0, 0, 0, 0.75)',
+  companyName: '#ffb155',
   ...chartColors,
 };

@@ -11,4 +11,6 @@ export interface ICompany {
   isDeleted: boolean;
   isActive: boolean;
   _id: string;
+  createdAt: number;
+  updatedAt: number;
 }

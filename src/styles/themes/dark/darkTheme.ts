@@ -104,6 +104,7 @@ export const darkColorsTheme: ITheme = {
   breadcrumb: '#a9a9a9',
   icon: '#a9a9a9',
   iconHover: '#ffffff',
+  companyName: '#ffb155',
   ...chartColors,
 };
 

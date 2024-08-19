@@ -70,4 +70,5 @@ export interface ITheme {
   breadcrumb: string;
   icon: string;
   iconHover: string;
+  companyName: string;
 }

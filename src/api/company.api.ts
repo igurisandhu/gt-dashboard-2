@@ -31,9 +31,16 @@ interface IAddCompanyData {
   email: string;
   phone: number;
   website?: string;
+  _id?: string;
+  isActive?: boolean;
 }
 
 export const addCompany = (addCompanyData: IAddCompanyData): Promise<IAddCompanyResponse> => {
   const url = 'company/add';
   return httpApi.post<IAddCompanyResponse>(url, addCompanyData).then(({ data }) => data);
+};
+
+export const deleteCompany = (_id: string): Promise<IAddCompanyResponse> => {
+  const url = 'company/' + _id;
+  return httpApi.delete<IAddCompanyResponse>(url).then(({ data }) => data);
 };

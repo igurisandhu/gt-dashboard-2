@@ -101,6 +101,7 @@ const getThemeVariables = (theme: ThemeType) => css`
   --avatar-bg: ${themeObject[theme].avatarBg};
   --alert-text-color: ${themeObject[theme].alertTextColor};
   --breadcrumb-color: ${themeObject[theme].breadcrumb};
+  --company-name-color: ${themeObject[theme].companyName};
 `;
 
 export const lightThemeVariables = css`

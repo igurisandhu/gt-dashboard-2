@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { BaseForm } from '@app/components/common/forms/BaseForm/BaseForm';
 import { notificationController } from '@app/controllers/notificationController';
 import * as Auth from '@app/components/layouts/AuthLayout/AuthLayout.styles';
 import * as S from './AddCompany.styles';
 import { addCompany } from '@app/api/company.api';
+import { ICompany } from '@app/interfaces/companies';
+import { BaseForm } from '@app/components/common/forms/BaseForm/BaseForm';
 
 interface IAddCompanyFormData {
   name: string;
   email: string;
   phone: number;
   website?: string;
+  _id?: string;
 }
 
 const initValues = {
@@ -21,13 +23,18 @@ const initValues = {
   phone: 919569602213,
 };
 
-export const AddCompany: React.FC<{ hideAddCompanyModal: () => void }> = ({ hideAddCompanyModal }) => {
+export const AddCompany: React.FC<{ hideAddCompanyModal: () => void; company: ICompany | undefined }> = ({
+  hideAddCompanyModal,
+  company,
+}) => {
   const { t } = useTranslation();
+  const [Form] = BaseForm.useForm();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (values: IAddCompanyFormData) => {
-    addCompany(values)
+    setIsLoading(true);
+    addCompany({ ...values, _id: company?._id })
       .then(() => {
         setIsLoading(false);
         hideAddCompanyModal();
@@ -36,8 +43,20 @@ export const AddCompany: React.FC<{ hideAddCompanyModal: () => void }> = ({ hide
         notificationController.error({ message: error.message });
         setIsLoading(false);
         hideAddCompanyModal();
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
+
+  useEffect(() => {
+    Form.setFieldsValue({
+      name: company?.name,
+      email: company?.email,
+      website: company?.website,
+      phone: company?.phone,
+    });
+  });
 
   return (
     <BaseForm layout="vertical" onFinish={handleSubmit} requiredMark="optional" initialValues={initValues}>
@@ -93,7 +112,7 @@ export const AddCompany: React.FC<{ hideAddCompanyModal: () => void }> = ({ hide
       </Auth.ActionsWrapper>
       <BaseForm.Item noStyle>
         <Auth.SubmitButton type="primary" htmlType="submit" loading={isLoading}>
-          {t('common.signUp')}
+          {'Add Company'}
         </Auth.SubmitButton>
       </BaseForm.Item>
     </BaseForm>
