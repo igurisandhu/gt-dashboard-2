@@ -1,0 +1,2 @@
+(this["webpackJsonplightence-admin"]=this["webpackJsonplightence-admin"]||[]).push([[10],{650:function(e,t,c){"use strict";c.r(t);var n=c(0),a=c(21),s=c(22),i=c(87),u=c(2);t.default=()=>{const e=Object(a.a)();return Object(n.useEffect)((()=>{e(Object(i.c)())}),[e]),Object(u.jsx)(s.a,{to:"/auth/login",replace:!0})}}}]);
+//# sourceMappingURL=10.4bd92696.chunk.js.map
