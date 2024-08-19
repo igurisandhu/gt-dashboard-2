@@ -253,13 +253,7 @@ const Managers: React.FC = () => {
       <BaseModal closable={true} footer={false} onCancel={() => hideManageTeamsModal()} open={isManageTeamModal}>
         <ManageTeams manager_id={selectedManager || ''} />
       </BaseModal>
-      <BaseModal
-        width={'70%'}
-        closable={true}
-        footer={false}
-        onCancel={() => hidePermissionModal()}
-        open={isPermissionModal}
-      >
+      <BaseModal closable={true} footer={false} onCancel={() => hidePermissionModal()} open={isPermissionModal}>
         <ManagerPermissions manager_id={selectedManager || ''} />
       </BaseModal>
       <PageTitle>{t('managers.managers')}</PageTitle>

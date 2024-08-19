@@ -82,22 +82,24 @@ export const ManagerPermissions: React.FC<{ manager_id?: string }> = ({ manager_
       <S.Title>{'Permissions'}</S.Title>
       <BaseRow gutter={[10, 10]} justify={'space-around'}>
         {Object.keys(permissions).map((key: string, index: number) => (
-          <BaseCard
-            loading={loading}
-            style={{ width: '30%' }}
-            key={index}
-            title={`${key[0].toUpperCase() + key.slice(1).toLowerCase()}s`}
-          >
-            {Object.keys(permissions[key]).map((permission: string, i: number) => (
-              <BaseCol key={i} style={{ display: 'flex', justifyContent: 'space-around' }}>
-                <FormItemLabel label={permission[0].toUpperCase() + permission.slice(1).toLowerCase()} prefixCls={''} />
-                <Switch
-                  checked={permissions[String(key) as keyof Permissions][String(permission) as keyof PermissionDetail]}
-                  onChange={(value) => handleSwitchChange(key, permission, value)}
-                />
-              </BaseCol>
-            ))}
-          </BaseCard>
+          <BaseCol key={index}>
+            <BaseCard loading={loading} title={`${key[0].toUpperCase() + key.slice(1).toLowerCase()}s`}>
+              {Object.keys(permissions[key]).map((permission: string, i: number) => (
+                <BaseCol key={i} style={{ display: 'flex', justifyContent: 'space-around' }}>
+                  <FormItemLabel
+                    label={permission[0].toUpperCase() + permission.slice(1).toLowerCase()}
+                    prefixCls={''}
+                  />
+                  <Switch
+                    checked={
+                      permissions[String(key) as keyof Permissions][String(permission) as keyof PermissionDetail]
+                    }
+                    onChange={(value) => handleSwitchChange(key, permission, value)}
+                  />
+                </BaseCol>
+              ))}
+            </BaseCard>
+          </BaseCol>
         ))}
       </BaseRow>
     </>

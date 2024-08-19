@@ -18,18 +18,17 @@ export const BASE_COLORS = {
 export const LAYOUT = {
   mobile: {
     paddingVertical: '0.75rem',
-    paddingHorizontal: '1rem',
-    headerHeight: '4.25rem',
-    headerPadding: '1rem',
+    paddingHorizontal: '0.5rem',
+    headerHeight: '3.25rem',
+    headerPadding: '0rem',
   },
   desktop: {
-    paddingVertical: '0rem',
-    paddingHorizontal: '1.5rem',
-    headerHeight: '0rem',
+    paddingVertical: '0',
+    paddingHorizontal: '0.5rem',
+    headerHeight: '4.25rem',
+    headerPadding: '0rem',
     headerLogoHeight: '0rem',
-    headerLogoPedding: '0px',
-    headerPeddingHorizontal: '0px',
-    headerPaddingVertical: '0.0rem',
+    headerLogoPedding: '0rem',
   },
 } as const;
 

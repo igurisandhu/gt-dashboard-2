@@ -20,6 +20,7 @@ import TaskActionButton from './ActionButton';
 import { BaseButton } from '@app/components/common/BaseButton/BaseButton';
 import { IJob, ITask } from '@app/interfaces/tasks';
 import { Dayjs } from 'dayjs';
+import { PageTitle } from '@app/components/common/PageTitle/PageTitle';
 
 function disabledDate(current: Dayjs) {
   return current && Number(current) < Number(moment().startOf('day'));
@@ -162,142 +163,145 @@ export const AddTask: React.FC = () => {
   }, [Team, navigate, _id]);
 
   return (
-    <BaseRow gutter={[20, 20]}>
-      <BaseCol xl={12} xxl={12}>
-        <BaseForm
-          style={{ padding: '10px' }}
-          layout="vertical"
-          onFinish={handleSubmit}
-          form={form}
-          requiredMark="optional"
-        >
-          <div style={{ maxHeight: '74vh', overflow: 'auto' }}>
-            {tasks.map((task, index) => (
-              <BaseRow key={task.id} style={{ marginBottom: '20px' }}>
-                <BaseCol xl={24} xxl={24}>
-                  <BaseCollapse
-                    activeKey={activeKey}
-                    onChange={(keys) => setActiveKey(Array.isArray(keys) ? keys : [keys])}
-                  >
-                    <BaseCollapse.Panel
-                      header={
-                        <BaseRow justify="space-between" align="middle">
-                          <BaseCol>
-                            <h3>Task {index + 1}</h3>
-                          </BaseCol>
-                          <BaseCol>
-                            <BaseRow gutter={[5, 0]} align="middle">
-                              <TaskActionButton
-                                icon="↑"
-                                tooltip={t('tasks.move-up')}
-                                disabled={index === 0}
-                                onClick={(event) => {
-                                  event.stopPropagation();
-                                  moveTask(index, index - 1);
-                                }}
-                              />
-                              <TaskActionButton
-                                icon="↓"
-                                tooltip={t('tasks.move-down')}
-                                disabled={index === tasks.length - 1}
-                                onClick={(event) => {
-                                  event.stopPropagation();
-                                  moveTask(index, index + 1);
-                                }}
-                              />
-                              <TaskActionButton
-                                icon="+"
-                                tooltip={t('tasks.add-task')}
-                                disabled={index !== tasks.length - 1}
-                                onClick={addNewTask}
-                              />
-                              <TaskActionButton
-                                icon="-"
-                                tooltip={t('tasks.remove-task')}
-                                disabled={tasks.length === 1}
-                                onClick={(event) => removeTask(task.id, event)}
-                              />
-                            </BaseRow>
-                          </BaseCol>
-                        </BaseRow>
-                      }
-                      key={task.id.toString()}
+    <>
+      <PageTitle>Add Job</PageTitle>
+      <BaseRow gutter={[20, 20]}>
+        <BaseCol xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
+          <BaseForm
+            style={{ padding: '10px' }}
+            layout="vertical"
+            onFinish={handleSubmit}
+            form={form}
+            requiredMark="optional"
+          >
+            <div style={{ maxHeight: '74vh', overflow: 'auto' }}>
+              {tasks.map((task, index) => (
+                <BaseRow key={task.id} style={{ marginBottom: '20px' }}>
+                  <BaseCol xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+                    <BaseCollapse
+                      activeKey={activeKey}
+                      onChange={(keys) => setActiveKey(Array.isArray(keys) ? keys : [keys])}
                     >
-                      <BaseFormItem
-                        name={[`task_${index}`, 'address']}
-                        label={'Address'}
-                        rules={[{ required: true, message: t('common.requiredField') }]}
+                      <BaseCollapse.Panel
+                        header={
+                          <BaseRow justify="space-between" align="middle">
+                            <BaseCol>
+                              <h3>Task {index + 1}</h3>
+                            </BaseCol>
+                            <BaseCol>
+                              <BaseRow gutter={[5, 0]} align="middle">
+                                <TaskActionButton
+                                  icon="↑"
+                                  tooltip={t('tasks.move-up')}
+                                  disabled={index === 0}
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                    moveTask(index, index - 1);
+                                  }}
+                                />
+                                <TaskActionButton
+                                  icon="↓"
+                                  tooltip={t('tasks.move-down')}
+                                  disabled={index === tasks.length - 1}
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                    moveTask(index, index + 1);
+                                  }}
+                                />
+                                <TaskActionButton
+                                  icon="+"
+                                  tooltip={t('tasks.add-task')}
+                                  disabled={index !== tasks.length - 1}
+                                  onClick={addNewTask}
+                                />
+                                <TaskActionButton
+                                  icon="-"
+                                  tooltip={t('tasks.remove-task')}
+                                  disabled={tasks.length === 1}
+                                  onClick={(event) => removeTask(task.id, event)}
+                                />
+                              </BaseRow>
+                            </BaseCol>
+                          </BaseRow>
+                        }
+                        key={task.id.toString()}
                       >
-                        <GooglePlacesAutocomplete
-                          selectProps={{
-                            onChange: (value) => value && setAddress(value, index),
-                            value: { label: addresses[index].address, value: addresses[index].address },
-                          }}
-                          debounce={2000}
-                          apiKey="AIzaSyCQFW0Khi-AoFWsr8SyEt1WKbC5fireFpc"
-                        />
-                      </BaseFormItem>
-                      <BaseFormItem
-                        name={[`task_${index}`, 'type']}
-                        label={'Type'}
-                        rules={[{ required: true, message: t('common.requiredField') }]}
-                      >
-                        <BaseSelect
-                          placeholder="Select Task Type"
-                          options={[
-                            { label: 'Pickup', value: 1 },
-                            { label: 'Delivery', value: 2 },
-                          ]}
-                        />
-                      </BaseFormItem>
-                      <BaseFormItem
-                        name={[`task_${index}`, 'name']}
-                        label={'Name'}
-                        rules={[{ required: true, message: t('common.requiredField') }]}
-                      >
-                        <BaseInput placeholder={'James Bond'} type="text" />
-                      </BaseFormItem>
-                      <BaseFormItem
-                        name={[`task_${index}`, 'phone']}
-                        label={t('common.phone')}
-                        rules={[{ required: true, message: t('common.requiredField') }]}
-                      >
-                        <BaseInput placeholder={'9876543210'} type="number" />
-                      </BaseFormItem>
-                      <BaseFormItem name={[`task_${index}`, 'datetime']} label={'Date & Time'}>
-                        <BaseDatePicker
-                          placeholder={moment().format('YYYY-MM-DD HH:mm:ss')}
-                          disabledDate={disabledDate}
-                          style={{ width: '100%' }}
-                          showTime
-                          showSecond={false}
-                        />
-                      </BaseFormItem>
-                    </BaseCollapse.Panel>
-                  </BaseCollapse>
-                </BaseCol>
-              </BaseRow>
-            ))}
-          </div>
-          <BaseRow>
-            <BaseCol xxl={24} xl={24} style={{ marginTop: '10px' }}>
-              <BaseButton type="primary" style={{ width: '100%' }} htmlType="submit" loading={loading}>
-                {_id ? 'Update Job' : 'Create Job'}
-              </BaseButton>
-            </BaseCol>
-          </BaseRow>
-        </BaseForm>
-      </BaseCol>
-      <BaseCol xl={12} xxl={12}>
-        <LeafletMaps
-          locations={addresses}
-          style={{
-            border: 'solid 3px #85b3cc',
-            borderRadius: '20px',
-            height: '84vh',
-          }}
-        />
-      </BaseCol>
-    </BaseRow>
+                        <BaseFormItem
+                          name={[`task_${index}`, 'address']}
+                          label={'Address'}
+                          rules={[{ required: true, message: t('common.requiredField') }]}
+                        >
+                          <GooglePlacesAutocomplete
+                            selectProps={{
+                              onChange: (value) => value && setAddress(value, index),
+                              value: { label: addresses[index].address, value: addresses[index].address },
+                            }}
+                            debounce={2000}
+                            apiKey="AIzaSyCQFW0Khi-AoFWsr8SyEt1WKbC5fireFpc"
+                          />
+                        </BaseFormItem>
+                        <BaseFormItem
+                          name={[`task_${index}`, 'type']}
+                          label={'Type'}
+                          rules={[{ required: true, message: t('common.requiredField') }]}
+                        >
+                          <BaseSelect
+                            placeholder="Select Task Type"
+                            options={[
+                              { label: 'Pickup', value: 1 },
+                              { label: 'Delivery', value: 2 },
+                            ]}
+                          />
+                        </BaseFormItem>
+                        <BaseFormItem
+                          name={[`task_${index}`, 'name']}
+                          label={'Name'}
+                          rules={[{ required: true, message: t('common.requiredField') }]}
+                        >
+                          <BaseInput placeholder={'James Bond'} type="text" />
+                        </BaseFormItem>
+                        <BaseFormItem
+                          name={[`task_${index}`, 'phone']}
+                          label={t('common.phone')}
+                          rules={[{ required: true, message: t('common.requiredField') }]}
+                        >
+                          <BaseInput placeholder={'9876543210'} type="number" />
+                        </BaseFormItem>
+                        <BaseFormItem name={[`task_${index}`, 'datetime']} label={'Date & Time'}>
+                          <BaseDatePicker
+                            placeholder={moment().format('YYYY-MM-DD HH:mm:ss')}
+                            disabledDate={disabledDate}
+                            style={{ width: '100%' }}
+                            showTime
+                            showSecond={false}
+                          />
+                        </BaseFormItem>
+                      </BaseCollapse.Panel>
+                    </BaseCollapse>
+                  </BaseCol>
+                </BaseRow>
+              ))}
+            </div>
+            <BaseRow>
+              <BaseCol xs={24} sm={24} md={24} lg={24} xl={24} xxl={24} style={{ marginTop: '10px' }}>
+                <BaseButton type="primary" style={{ width: '100%' }} htmlType="submit" loading={loading}>
+                  {_id ? 'Update Job' : 'Create Job'}
+                </BaseButton>
+              </BaseCol>
+            </BaseRow>
+          </BaseForm>
+        </BaseCol>
+        <BaseCol xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
+          <LeafletMaps
+            locations={addresses}
+            style={{
+              border: 'solid 3px #85b3cc',
+              borderRadius: '20px',
+              height: '84vh',
+            }}
+          />
+        </BaseCol>
+      </BaseRow>
+    </>
   );
 };

@@ -7,11 +7,12 @@ import * as S from './MainLayout.styles';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useResponsive } from '@app/hooks/useResponsive';
 import { References } from '@app/components/common/References/References';
+import { DefaultSelect } from '../DefaultSelect';
 
 const MainLayout: React.FC = () => {
   const [isTwoColumnsLayout, setIsTwoColumnsLayout] = useState(true);
   const [siderCollapsed, setSiderCollapsed] = useState(true);
-  const { isDesktop } = useResponsive();
+  const { isDesktop, isTablet } = useResponsive();
   const location = useLocation();
 
   const toggleSider = () => setSiderCollapsed(!siderCollapsed);
@@ -29,6 +30,7 @@ const MainLayout: React.FC = () => {
         </MainHeader>
         <MainContent id="main-content" $isTwoColumnsLayout={isTwoColumnsLayout}>
           <div>
+            {!isDesktop && !isTablet && <DefaultSelect />}
             <Outlet />
           </div>
           {!isTwoColumnsLayout && <References />}

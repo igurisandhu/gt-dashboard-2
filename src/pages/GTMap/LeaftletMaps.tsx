@@ -26,6 +26,7 @@ const LeafletMaps: React.FC<{ locations?: any[]; agents?: IAgent[]; style?: Reco
 
   return (
     <MapContainer
+      center={mapCenter as keyof LatLngExpression}
       key={mapCenter ? mapCenter[0] : 1}
       zoom={15}
       zoomControl={true}
