@@ -69,7 +69,7 @@ const Companies: React.FC = () => {
         <AddCompany company={editCompany} hideAddCompanyModal={hideAddCompanyModal} />
       </BaseModal>
       <PageTitle>{t('companies.companies')}</PageTitle>
-      <PageHeader title={'Jobs'}>
+      <PageHeader title={t('companies.companies')}>
         <BaseRow align="middle">
           <BaseCol>
             <BaseTooltip showArrow={true} placement="left" title={t('companies.add-company')}>
