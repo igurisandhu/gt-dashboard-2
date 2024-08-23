@@ -61,10 +61,10 @@ const DashboardPage: React.FC = () => {
         </div>
       )}
       <PageTitle>{t('Dashboard')}</PageTitle>
-      <BaseRow gutter={[30, 30]}>
+      <BaseRow gutter={[10, 10]}>
         {metricNames.map((metricName: string, index: number) => (
           <BaseCol key={index} xxl={12} xl={12} xs={24}>
-            <BaseCard padding="0 0 1.875rem" title={metricName.toUpperCase()}>
+            <BaseCard title={metricName.toUpperCase()}>
               <PieChart
                 // option={{ isLoading }}
                 data={metricsData[index]}
@@ -75,7 +75,7 @@ const DashboardPage: React.FC = () => {
           </BaseCol>
         ))}
       </BaseRow>
-      <BaseRow style={{ marginTop: 30 }} gutter={[30, 30]}>
+      <BaseRow style={{ marginTop: 30 }} gutter={[10, 10]}>
         {metricNames.map((metricName: string, index: number) => (
           <BaseCol key={index} xxl={24} xl={24} xs={24}>
             <BarAnimationDelayChart data={metricsData[index]} name={metricName.toUpperCase()} />
