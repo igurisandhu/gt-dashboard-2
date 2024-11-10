@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import * as S from './ProfileOverlay.styles';
 import { useAppDispatch, useAppSelector } from '@app/hooks/reduxHooks';
-import { setCompany } from '@app/store/slices/companySlice';
+import { doChangeCompany } from '@app/store/slices/companySlice';
 
 export const ProfileOverlay: React.FC = ({ ...props }) => {
   const { t } = useTranslation();
@@ -19,7 +19,7 @@ export const ProfileOverlay: React.FC = ({ ...props }) => {
       {Company && (
         <S.Text
           onClick={() => {
-            dispatch(setCompany(null));
+            dispatch(doChangeCompany());
           }}
         >
           <Link to="/companies">Change Compnay</Link>

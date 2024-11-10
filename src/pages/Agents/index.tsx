@@ -16,12 +16,13 @@ import { IAgent, IAgentEditable } from '@app/interfaces/agents';
 
 import { AddAgent } from '@app/components/agent/addAgent/AddAgent';
 import TableSearch from '@app/components/common/TableSearch';
-import { useAppSelector } from '@app/hooks/reduxHooks';
+import { useAppSelector, useAppDispatch } from '@app/hooks/reduxHooks';
 import { BaseSwitch } from '@app/components/common/BaseSwitch/BaseSwitch';
 import { ITeam } from '@app/interfaces/teams';
 import { BaseModal } from '@app/components/common/BaseModal/BaseModal';
 import AgentMap from '@app/components/agent/AgentLocation/AgentMap';
 import { Link } from 'react-router-dom';
+import { setAgent, setAgents } from '@app/store/slices/agentSlice';
 
 const Agents: React.FC = () => {
   const { t } = useTranslation();
@@ -39,6 +40,7 @@ const Agents: React.FC = () => {
   const Team: ITeam | null = useAppSelector((state) => state.team);
   const Agents = useAppSelector((state) => state.agents);
   const [mapAgent, setMapAgent] = useState<IAgent | undefined>();
+  const dispatch = useAppDispatch();
 
   const GetAgents = (payload: { page?: number; limit?: number; aganet_id?: string }) => {
     setLoading(true);
@@ -106,6 +108,8 @@ const Agents: React.FC = () => {
       setLoading(true);
       await deleteAgent({ _id: rowId });
       setTableData([...tableData.filter((item) => item._id !== rowId)]);
+      dispatch(setAgents([]));
+      dispatch(setAgent(null));
     } catch (errorDeleteAgent) {
       notificationController.error({ message: String(errorDeleteAgent) });
       console.log('errorDeleteAgent:', errorDeleteAgent);
@@ -256,6 +260,7 @@ const Agents: React.FC = () => {
   return (
     <>
       <BaseModal
+        key={mapAgent && mapAgent._id}
         width={800}
         footer={false}
         onCancel={() => setMapAgent(undefined)}
@@ -263,7 +268,7 @@ const Agents: React.FC = () => {
         closable={true}
         title="Agent Location"
       >
-        {mapAgent && <AgentMap key={mapAgent && mapAgent._id} agent={mapAgent} />}
+        {mapAgent && <AgentMap key={mapAgent && mapAgent._id} agent={mapAgent || null} />}
       </BaseModal>
       <BaseModal closable={true} footer={false} onCancel={() => hideAddAgentModal()} open={isAddAgentModal}>
         <AddAgent key={selectedAgent} agent_id={selectedAgent} hideAddAgentModal={hideAddAgentModal} />

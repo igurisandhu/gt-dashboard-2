@@ -21,10 +21,11 @@ import {
   deleteAgent,
   deleteTeam,
   deleteAgents,
+  deleteTeams,
 } from '@app/services/localStorage.service';
 import { setCompany } from './companySlice';
 import { setAgent, setAgents } from './agentSlice';
-import { setTeam } from './teamSlice';
+import { setTeam, setTeams } from './teamSlice';
 
 export interface AuthSlice {
   token: string | null;
@@ -74,8 +75,10 @@ export const doLogout = createAsyncThunk('auth/doLogout', (payload, { dispatch }
   deleteCompany();
   deleteAgent();
   deleteTeam();
+  deleteTeams();
   deleteAgents();
   dispatch(setTeam(null));
+  dispatch(setTeams([]));
   dispatch(setUser(null));
   dispatch(setCompany(null));
   dispatch(setAgent(null));

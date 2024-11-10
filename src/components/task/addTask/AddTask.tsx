@@ -39,7 +39,7 @@ export const AddTask: React.FC = () => {
   const { _id } = useParams();
 
   const handleSubmit = (values: { [x: string]: any }) => {
-    // setLoading(true)
+    setLoading(true)
 
     const tasksData = tasks.map((task, index) => ({
       ...values[`task_${index}`],
@@ -68,7 +68,7 @@ export const AddTask: React.FC = () => {
     const newTaskId = tasks.length;
     setTasks([...tasks, { id: newTaskId }]);
     setAddresses([...addresses, { address: '', latLng: [0, 0], type: 1 }]);
-    setActiveKey([...activeKey, newTaskId.toString()]);
+    setActiveKey([newTaskId.toString()]);
   };
 
   const removeTask = (id: number, event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -267,7 +267,11 @@ export const AddTask: React.FC = () => {
                         >
                           <BaseInput placeholder={'9876543210'} type="number" />
                         </BaseFormItem>
-                        <BaseFormItem name={[`task_${index}`, 'datetime']} label={'Date & Time'}>
+                        <BaseFormItem
+                          name={[`task_${index}`, 'datetime']}
+                          label={'Date & Time'}
+                          rules={[{ required: true, message: t('common.requiredField') }]}
+                        >
                           <BaseDatePicker
                             placeholder={moment().format('YYYY-MM-DD HH:mm:ss')}
                             disabledDate={disabledDate}

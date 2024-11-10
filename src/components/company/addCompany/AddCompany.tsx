@@ -50,17 +50,19 @@ export const AddCompany: React.FC<{ hideAddCompanyModal: () => void; company: IC
   };
 
   useEffect(() => {
-    Form.setFieldsValue({
-      name: company?.name,
-      email: company?.email,
-      website: company?.website,
-      phone: company?.phone,
-    });
-  });
+    if (company) {
+      Form.setFieldsValue({
+        name: company?.name,
+        email: company?.email,
+        website: company?.website,
+        phone: company?.phone,
+      });
+    }
+  }, [company]);
 
   return (
-    <BaseForm layout="vertical" onFinish={handleSubmit} requiredMark="optional" initialValues={initValues}>
-      <S.Title>{t('common.add-company')}</S.Title>
+    <BaseForm form={Form} layout="vertical" onFinish={handleSubmit} requiredMark="optional" initialValues={initValues}>
+      <S.Title>{company ? t('common.edit-company') : t('common.add-company')}</S.Title>
       <Auth.FormItem
         name="name"
         label={t('common.name')}
@@ -112,7 +114,7 @@ export const AddCompany: React.FC<{ hideAddCompanyModal: () => void; company: IC
       </Auth.ActionsWrapper>
       <BaseForm.Item noStyle>
         <Auth.SubmitButton type="primary" htmlType="submit" loading={isLoading}>
-          {'Add Company'}
+          {company ? 'Edit Company' : 'Add Company'}
         </Auth.SubmitButton>
       </BaseForm.Item>
     </BaseForm>

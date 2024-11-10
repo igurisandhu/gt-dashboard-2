@@ -116,24 +116,23 @@ const Companies: React.FC = () => {
                       <S.Title level={5}>{company.name}</S.Title>
 
                       <BaseRow>
-                        <BaseTooltip showArrow={true} placement="right" title={'Edit Company'}>
+                        <BaseTooltip showArrow={true} placement="left" title={'Edit Company'}>
                           <EditOutlined
-                            style={{ fontSize: '30px', marginLeft: '10px', color: '#1677ff' }}
+                            style={{ fontSize: '20px', marginLeft: '10px', color: '#1677ff' }}
                             onClick={(event) => {
                               event.stopPropagation();
-                              setIsAddCompanyModal(true);
                               setEditCompany(company);
+                              setIsAddCompanyModal(true);
                             }}
                           />
                         </BaseTooltip>
 
                         <BaseTooltip showArrow={true} placement="right" title={'Delete Company'}>
                           <DeleteOutlined
-                            style={{ fontSize: '30px', marginLeft: '10px', color: 'red' }}
+                            style={{ fontSize: '20px', marginLeft: '10px', color: 'red' }}
                             onClick={(event) => {
                               event.stopPropagation();
-                              setIsAddCompanyModal(true);
-                              setEditCompany(company);
+                              deleteCompany(company._id).then(() => GetCompanies());
                             }}
                           />
                         </BaseTooltip>

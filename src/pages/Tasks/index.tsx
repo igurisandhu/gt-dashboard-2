@@ -13,16 +13,12 @@ import { BaseRow } from '@app/components/common/BaseRow/BaseRow';
 import { BaseCol } from '@app/components/common/BaseCol/BaseCol';
 import { BaseTooltip } from '@app/components/common/BaseTooltip/BaseTooltip';
 import { IJob, ITask } from '@app/interfaces/tasks';
-import { BaseInput } from '@app/components/common/inputs/BaseInput/BaseInput';
-import { Switch } from 'antd';
-import type { FilterValue, SorterResult } from 'antd/es/table/interface';
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { BaseSwitch } from '@app/components/common/BaseSwitch/BaseSwitch';
 import { useAppSelector } from '@app/hooks/reduxHooks';
 import { BaseModal } from '@app/components/common/BaseModal/BaseModal';
 import { IAgent } from '@app/interfaces/agents';
 import AgentMap from '@app/components/agent/AgentLocation/AgentMap';
+import { BaseSelect } from '@app/components/common/selects/BaseSelect/BaseSelect';
 
 const Tasks: React.FC = () => {
   const { t } = useTranslation();
@@ -121,7 +117,7 @@ const Tasks: React.FC = () => {
       dataIndex: 'key',
       width: '10%',
       sorter: true,
-      render: (text: string, record: ITask, key: number) => {
+      render: (text: string, record: IJob, key: number) => {
         return (pagination.page - 1) * pagination.limit + (key + 1);
       },
     },
@@ -166,25 +162,6 @@ const Tasks: React.FC = () => {
           >
             {Agents.filter((agent) => agent._id == record.agent_id)[0]?.name}
           </a>
-        );
-      },
-    },
-    {
-      title: t('tasks.active'),
-      dataIndex: 'isActive',
-      width: '10%',
-      filters: [
-        { text: 'Yes', value: true },
-        { text: 'No', value: false },
-      ],
-      render: (text: string, record: IJob, key: number) => {
-        return (
-          <BaseSwitch
-            defaultChecked={record.isActive}
-            onChange={(isActive) => {
-              changeActiveStatus(key, isActive);
-            }}
-          />
         );
       },
     },

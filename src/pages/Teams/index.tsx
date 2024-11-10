@@ -14,11 +14,39 @@ import { BaseCol } from '@app/components/common/BaseCol/BaseCol';
 import { BaseTooltip } from '@app/components/common/BaseTooltip/BaseTooltip';
 import { ITeam } from '@app/interfaces/teams';
 import { BaseInput } from '@app/components/common/inputs/BaseInput/BaseInput';
-import { Modal, Switch } from 'antd';
 import { AddTeam } from '@app/components/team/addTeam/AddTeam';
-import type { FilterValue, SorterResult } from 'antd/es/table/interface';
 import TableSearch from '@app/components/common/TableSearch';
 import { BaseModal } from '@app/components/common/BaseModal/BaseModal';
+import { setTeam, setTeams } from '@app/store/slices/teamSlice';
+import { useDispatch } from 'react-redux';
+import { Switch } from 'antd';
+
+const EditableCell: React.FC<any> = ({
+  editing,
+  dataIndex,
+  title,
+  inputNode,
+  record,
+  index,
+  children,
+  ...restProps
+}) => {
+  return (
+    <td {...restProps}>
+      {editing ? (
+        <BaseForm.Item
+          name={dataIndex}
+          style={{ margin: 0 }}
+          rules={[{ required: true, message: `Please input ${title}!` }]}
+        >
+          {inputNode}
+        </BaseForm.Item>
+      ) : (
+        children
+      )}
+    </td>
+  );
+};
 
 const Teams: React.FC = () => {
   const { t } = useTranslation();
@@ -32,6 +60,7 @@ const Teams: React.FC = () => {
   const [nameSort, setNameSort] = useState('');
   const [activeFilter, setActiveFilter] = useState<boolean | null>(null);
   const [total, setTotal] = useState(0);
+  const dispatch = useDispatch();
 
   const GetTeams = (payload: { page?: number; limit?: number; team_id?: string }) => {
     setLoading(true);
@@ -82,7 +111,7 @@ const Teams: React.FC = () => {
     setNameSearch(search);
   };
 
-  const isEditing = (record: ITeam) => record._id === editingKey;
+  const isEditing = (record: ITeam) => String(record._id) === editingKey;
 
   const edit = (record: ITeam) => {
     form.setFieldsValue({ ...record });
@@ -122,6 +151,8 @@ const Teams: React.FC = () => {
       setLoading(true);
       await deleteTeam({ _id: rowId });
       setTableData([...tableData.filter((item) => item._id !== rowId)]);
+      dispatch(setTeams([]));
+      dispatch(setTeam(null));
     } catch (errorDeleteTeam) {
       console.log('errorDeleteTeam:', errorDeleteTeam);
     } finally {
@@ -157,7 +188,7 @@ const Teams: React.FC = () => {
       editable: true,
       sorter: true,
       ...TableSearch('name', handleNameSearch),
-      inputNode: (record: ITeam) => <BaseInput />,
+      inputNode: (record: ITeam) => <BaseInput defaultValue={record.name} />,
     },
     {
       title: t('teams.active'),
@@ -216,7 +247,6 @@ const Teams: React.FC = () => {
       ...col,
       onCell: (record: ITeam) => ({
         record,
-        key: record._id,
         inputNode: col.inputNode(record),
         dataIndex: col.dataIndex,
         title: col.title,
@@ -227,11 +257,8 @@ const Teams: React.FC = () => {
 
   return (
     <>
-      <BaseModal closable={true} footer={false} onCancel={() => hideAddTeamModal()} open={isAddTeamModal}>
-        <AddTeam hideAddTeamModal={hideAddTeamModal} />
-      </BaseModal>
-      <PageTitle>{t('teams.teams')}</PageTitle>
-      <PageHeader title={t('teams.teams')}>
+      <PageTitle>{t('common.team')}</PageTitle>
+      <PageHeader title={t('common.team')}>
         <BaseRow align="middle">
           <BaseCol>
             <BaseTooltip showArrow={true} placement="left" title={t('teams.add-team')}>
@@ -241,9 +268,7 @@ const Teams: React.FC = () => {
                 style={{ fontSize: '40px' }}
                 size="small"
                 shape="circle"
-                onClick={() => {
-                  setIsAddTeamModal(true);
-                }}
+                onClick={() => setIsAddTeamModal(true)}
               >
                 +
               </BaseButton>
@@ -251,27 +276,32 @@ const Teams: React.FC = () => {
           </BaseCol>
         </BaseRow>
       </PageHeader>
-      <BaseForm form={form} component={false}>
-        <BaseTable
-          // components={{
-          //   body: {
-          //     cell: ,
-          //   },
-          // }}
-          bordered
-          dataSource={tableData}
-          columns={mergedColumns}
-          rowClassName="editable-row"
-          pagination={{
-            pageSize: pagination.limit,
-            current: pagination.page,
-            total: total,
-          }}
-          onChange={handleTableChange}
-          loading={loading}
-          scroll={{ x: 800 }}
-        />
-      </BaseForm>
+      <BaseTable
+        components={{
+          body: {
+            cell: EditableCell,
+          },
+        }}
+        columns={mergedColumns}
+        rowClassName="editable-row"
+        bordered
+        loading={loading}
+        dataSource={tableData}
+        pagination={{
+          current: pagination.page,
+          pageSize: pagination.limit,
+          total: total,
+        }}
+        onChange={handleTableChange}
+      />
+      <BaseModal
+        title={t('common.addTeam')}
+        open={isAddTeamModal}
+        footer={false}
+        onCancel={() => setIsAddTeamModal(false)}
+      >
+        <AddTeam hideAddTeamModal={hideAddTeamModal} />
+      </BaseModal>
     </>
   );
 };
